@@ -1,0 +1,65 @@
+body {
+	background-color: rgb(231, 234, 243);
+}
+.degree {
+	font-size: 8px;
+}
+
+.weatherIcon {
+	border-radius: 80%;
+	opacity: 0.6;
+	background-color: rgb(255, 255, 255);
+	margin-right: 5px;
+	margin-left: 5px;
+}
+.smallWeatherIcon {
+	width: 30px;
+	height: 30px;
+	border-radius: 80%;
+	background-color: rgb(69, 69, 216);
+}
+
+.hourlyWeather {
+	height: 120px;
+	overflow-x: scroll;
+	overflow-y: visible;
+}
+
+.hourlyContainer {
+	border-top: 2px solid rgb(30, 30, 30);
+	padding-top: 10px;
+	margin-top: 10px;
+}
+
+.hourlyContainer::-webkit-scrollbar {
+	width: 10px;
+}
+
+.hourlyContainer::-webkit-scrollbar-track {
+	-webkit-box-shadow: 5px 5px 5px -5px rgba(34, 60, 80, 0.2) inset;
+	background-color: #878798;
+	border-radius: 10px;
+}
+
+.hourlyContainer::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	background: rgb(30, 30, 30);
+}
+
+#dailyWeather {
+	margin-top: 20px;
+	border: 3px solid white;
+	background-color: white;
+	border-radius: 10px;
+	min-width: 1090px;
+	min-height: 200px;
+}
+#weatherCardContainer {
+	min-width: 605px;
+	min-height: 300px;
+}
+
+#map {
+	width: 500px;
+	height: 310px;
+}
