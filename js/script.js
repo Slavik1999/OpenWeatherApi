@@ -290,7 +290,7 @@ function getWeatherIcons(weatherArr) {
 	let iconWidth = 100 - weatherArr.length * 25;
 
 	weatherArr.forEach((weather) => {
-		icons += `<img class="w-${iconWidth}" src="http://openweathermap.org/img/wn/${weather.icon}@2x.png"/>`;
+		icons += `<img class="w-${iconWidth}" src="https://openweathermap.org/img/wn/${weather.icon}@2x.png"/>`;
 	});
 
 	return icons;
