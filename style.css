@@ -46,12 +46,20 @@ body {
 	background: rgb(30, 30, 30);
 }
 
-#dailyWeather {
+#weekWeather {
 	margin-top: 20px;
 	border: 3px solid white;
 	background-color: white;
 	border-radius: 10px;
 	min-width: 1090px;
+	min-height: 200px;
+}
+#dayWeather {
+	margin-top: 20px;
+	border: 3px solid white;
+	background-color: white;
+	border-radius: 10px;
+
 	min-height: 200px;
 }
 #weatherCardContainer {
@@ -62,4 +70,57 @@ body {
 #map {
 	width: 500px;
 	height: 310px;
+}
+
+.dailyWeatherData {
+	width: 35%;
+}
+.weatherDiscription {
+	width: 30%;
+}
+
+.dailyWeatherHeaderAbout {
+	width: 45%;
+}
+
+.dailyWeatherIconsContainer {
+	width: 15%;
+	border-top: 2px solid rgba(34, 60, 80, 0.2);
+	border-right: 2px solid rgba(34, 60, 80, 0.2);
+}
+
+.dailyWeatherIcons {
+	width: 170px;
+}
+
+.weatherDailyData {
+	width: 45%;
+}
+
+.dayTemperatureHeaders,
+.dayTemperature {
+	width: 88%;
+	border-top: 2px solid rgba(34, 60, 80, 0.2);
+	border-right: 2px solid rgba(34, 60, 80, 0.2);
+	padding-right: 3%;
+}
+.dailyTempItem {
+	width: 40px;
+	text-align: center;
+}
+
+.dailyDayTime {
+	border-top: 2px solid rgba(34, 60, 80, 0.2);
+	width: 25%;
+}
+.dailyWeatherDiscription {
+	border-top: 2px solid rgba(34, 60, 80, 0.2);
+	border-right: 2px solid rgba(34, 60, 80, 0.2);
+	width: 20%;
+}
+
+#dailyWeatherItem {
+	background-color: white;
+	border: 2px solid rgba(34, 60, 80, 0.2);
+	border-radius: 10px;
 }

@@ -3,9 +3,12 @@ const city = document.querySelector('#city');
 const weather = document.querySelector('#weather');
 const weatherCard = document.querySelector('#weatherCard');
 const geoWeatherCard = document.querySelector('#geoWeatherCard');
+const weekWeather = document.querySelector('#weekWeather');
 const dailyWeather = document.querySelector('#dailyWeather');
 
 const key = '58f28aaca421e551be2bdbc434f08651';
+const defaultCity = 'Minsk';
+const defaultCoord = [ 54.11, 27.41 ];
 
 const formatDate = (dateSec) => {
 	const date = new Date(dateSec * 1000);
@@ -31,6 +34,24 @@ const formatHourlyDate = (dateSec) => {
 	return `${days[date.getDay()]}<br>${hours}:${minutes}`;
 };
 
+const formatDailyDayStart = (dateSec) => {
+	const date = new Date(dateSec * 1000);
+
+	let hours = date.getHours();
+	let minutes = date.getMinutes() >= 10 ? date.getMinutes() : `0${date.getMinutes()}`;
+
+	return `${hours}:${minutes}`;
+};
+
+const formatDailyDayLong = (dateSec) => {
+	const date = new Date(dateSec * 1000);
+
+	let hours = date.getHours() - 3;
+	let minutes = date.getMinutes() >= 10 ? date.getMinutes() : `0${date.getMinutes()}`;
+
+	return `${hours} h ${minutes} min`;
+};
+
 const getWeatherData = async (city) => {
 	let weatherRes = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}`);
 	let weatherData = await weatherRes.json();
@@ -49,7 +70,7 @@ const getHourlyWeatherData = async (latitude, longitude) => {
 	return hourlyWeatherData.hourly;
 };
 
-const getDailyWeatherData = async (latitude, longitude) => {
+const getWeekWeatherData = async (latitude, longitude) => {
 	let hourlyWeatherRes = await fetch(
 		`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude={hourly}&appid=${key}`
 	);
@@ -71,28 +92,37 @@ document.addEventListener('DOMContentLoaded', () => {
 				return result.geoObjects.get(0).properties.get('metaDataProperty').GeocoderMetaData.AddressDetails
 					.Country.AdministrativeArea.AdministrativeAreaName;
 			});
-
 		const weatherData = await getWeatherData(city);
 		const hourlyWeatherData = await getHourlyWeatherData(latitude, longitude);
-		const dailyWeatherData = await getDailyWeatherData(latitude, longitude);
+		const weekWeatherData = await getWeekWeatherData(latitude, longitude);
 
 		weatherCard.innerHTML = getCardTemplate(weatherData) + getHourlyWeatherTemplate(hourlyWeatherData);
-		dailyWeather.innerHTML = getDailyWeatherTemplate(dailyWeatherData);
+		weekWeather.innerHTML = getWeekWeatherTemplate(weekWeatherData);
+		dailyWeather.innerHTML = getDailyWeatherTemplate(weekWeatherData);
 
 		initMap(city);
 	};
 
-	const errorCallback = (error) => {
-		console.error(error);
+	const errorCallback = async (error) => {
+		const [ lat, lon ] = defaultCoord;
+		const weatherData = await getWeatherData(defaultCity);
+		const hourlyWeatherData = await getHourlyWeatherData(lat, lon);
+		const weekWeatherData = await getWeekWeatherData(lat, lon);
+
+		weatherCard.innerHTML = getCardTemplate(weatherData) + getHourlyWeatherTemplate(hourlyWeatherData);
+		weekWeather.innerHTML = getWeekWeatherTemplate(weekWeatherData);
+		dailyWeather.innerHTML = getDailyWeatherTemplate(weekWeatherData);
+
+		initMap(defaultCity);
 	};
 
 	navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
 });
 
-function getDailyWeatherTemplate(hourlyWeatherData) {
+function getDailyWeatherTemplate(dailyWeatherData) {
 	let daily = '';
 
-	hourlyWeatherData.map((dailyWeather) => {
+	dailyWeatherData.map((dailyWeather) => {
 		daily += getDailyTemplate(dailyWeather);
 	});
 
@@ -100,8 +130,108 @@ function getDailyWeatherTemplate(hourlyWeatherData) {
 }
 
 function getDailyTemplate(daily) {
-	const pressure = Math.floor(daily.pressure * 0.75);
+	const { dt, feels_like, humidity, pressure, temp, weather, wind_deg, wind_speed, sunrise, sunset } = daily;
+	const convertPressure = Math.floor(pressure * 0.75);
+	return `
+	<div class="d-flex p-3 ml-3 mt-5 justify-content-between" id='dailyWeatherItem'>
+		<div class='dailyWeatherData'>
+			<div class='dailyWeatherHeader d-flex mb-3'>
+				<div>
+					<b>
+						${formatDate(dt)}
+					</b>
+				</div>
+				<div class='dayTemperatureHeaders d-flex ml-2 mt-5 justify-content-between'>
+						<div><b>Day Part</b></div>
+						<div><b>Temp</b></div>
+						<div><b>Feels like</b></div>
+				</div>
+			</div>
+			<div class='dayTemperature d-flex justify-content-between ml-5'>
+				<div>
+					<div>Morning</div>
+					<div>Day</div>
+					<div>Evening</div>
+					<div>Night</div>
+				</div>
+				<div class='mr-4 d-flex flex-column align-items-end'>
+					${getDayPartTempTemplate(temp.morn)}
+					${getDayPartTempTemplate(temp.day)}
+					${getDayPartTempTemplate(temp.eve)}
+					${getDayPartTempTemplate(temp.night)}
+				</div>
+				<div class='mr-3 d-flex flex-column align-items-end'>
+					${getDayPartTempTemplate(feels_like.morn)}
+					${getDayPartTempTemplate(feels_like.day)}
+					${getDayPartTempTemplate(feels_like.eve)}
+					${getDayPartTempTemplate(feels_like.night)}
+				</div>
+			</div>
+		</div>
+		<div class='dailyWeatherIconsContainer d-flex justify-content-center align-items-center mt-5'>
+			<div class='dailyWeatherIcons'>
+				${getWeatherIcons(weather)}
+			</div>
+		</div>
+		<div class='dailyWeatherDiscription mt-5 d-flex flex-column align-items-start justify-content-around'>
+			<div>
+				<span><b>Pressure, mmHg: </b></span>
+				<span>${convertPressure}</span>
+			</div>
+			<div>
+				<span><b>Humidity, %: </b></span>
+				<span>${humidity}</span>
+			</div>
+			<div>
+				<span><b>Wind: </b></span>
+				<span>${wind_speed} m/s </span>
+				<span>${getWindDirection(wind_deg)}</span>
+			</div>
+		</div>
+		<div class='dailyDayTime mt-5 d-flex flex-column align-items-center justify-content-around'>
+			<div>
+				<img src='./img/day-and-night.png'/>
+			</div>
+			<div class='d-flex'>
+				<div class='mr-4 d-flex flex-column align-items-center'>
+					<img src='./img/sunrise.png'/>
+					<div>${formatDailyDayStart(sunrise)}</div>
+				</div>
+				<div class='mr-4 text-center'>
+					<div><b>Daylight hours</b></div>
+					<div>${formatDailyDayLong(sunset - sunrise)}</div>
+				</div>
+				<div class='d-flex flex-column align-items-center'>
+					<img src='./img/sunset.png'/>
+					<div>${formatDailyDayStart(sunset)}</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	`;
+}
 
+function getDayPartTempTemplate(temp) {
+	return `
+		<div>
+			${convertTemp(temp)}
+			<small><i class="fa fa-circle-o" aria-hidden="true">
+			</i></small>
+		</div>
+	`;
+}
+
+function getWeekWeatherTemplate(hourlyWeatherData) {
+	let daily = '';
+
+	hourlyWeatherData.map((dailyWeather) => {
+		daily += getWeekTemplate(dailyWeather);
+	});
+
+	return daily;
+}
+
+function getWeekTemplate(daily) {
 	return `	
 	<div class=" d-flex flex-column align-items-center justify-content-around pr-2 pl-4">
 		<div>${formatDate(daily.dt)}</div>
@@ -118,7 +248,7 @@ function getDailyTemplate(daily) {
 				<small><i class="fa fa-circle-o" aria-hidden="true">
 				</i></small>
 			</div>
-			<div>
+			<div class='text-center'>
 				<span>${getWeatherDiscription(daily.weather)}</span>
 			</div>
 	</div>
@@ -133,14 +263,14 @@ function getHourlyWeatherTemplate(hourlyWeatherData) {
 	});
 
 	return `
-				<div class="container-fluid ">
-					<div class="row flex-row flex-nowrap overflow-auto hourlyContainer">
-						${hourly}
-					</div>
+			<div class="container-fluid ">
+				<div class="row flex-row flex-nowrap overflow-auto hourlyContainer">
+					${hourly}
 				</div>
 			</div>
 		</div>
-`;
+	</div>
+	`;
 }
 
 function getHourlyTemplate(hourly) {
@@ -187,10 +317,11 @@ form.addEventListener('submit', async (e) => {
 	document.querySelector('#map').innerHTML = '';
 	const { lon, lat } = weatherData.coord;
 	const hourlyWeatherData = await getHourlyWeatherData(lat, lon);
-	const dailyWeatherData = await getDailyWeatherData(lat, lon);
+	const weekWeatherData = await getWeekWeatherData(lat, lon);
 
 	weatherCard.innerHTML = getCardTemplate(weatherData) + getHourlyWeatherTemplate(hourlyWeatherData);
-	dailyWeather.innerHTML = getDailyWeatherTemplate(dailyWeatherData);
+	weekWeather.innerHTML = getWeekWeatherTemplate(weekWeatherData);
+	dailyWeather.innerHTML = getDailyWeatherTemplate(weekWeatherData);
 
 	initMap(city.value);
 });
