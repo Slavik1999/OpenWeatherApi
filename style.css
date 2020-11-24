@@ -1,5 +1,6 @@
 body {
 	background-color: rgb(231, 234, 243);
+	height: 100%;
 }
 .degree {
 	font-size: 8px;
@@ -51,7 +52,6 @@ body {
 	border: 3px solid white;
 	background-color: white;
 	border-radius: 10px;
-	min-width: 1090px;
 	min-height: 200px;
 }
 #dayWeather {
