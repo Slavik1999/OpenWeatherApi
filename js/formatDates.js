@@ -33,3 +33,12 @@ const formatDailyDayLong = (dateSec) => {
 
 	return `${hours} h ${minutes} min`;
 };
+
+const formatHourlyDateForBorder = (dateSec) => {
+	const date = new Date(dateSec * 1000);
+
+	let hours = date.getHours();
+	let minutes = date.getMinutes() >= 10 ? date.getMinutes() : `0${date.getMinutes()}`;
+
+	return `${hours}:${minutes}`;
+};

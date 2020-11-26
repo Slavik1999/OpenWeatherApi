@@ -8,8 +8,8 @@ body {
 
 .weatherIcon {
 	border-radius: 80%;
-	opacity: 0.6;
-	background-color: rgb(255, 255, 255);
+	opacity: 0.9;
+	background-color: rgb(69, 69, 216);
 	margin-right: 5px;
 	margin-left: 5px;
 }
@@ -27,9 +27,9 @@ body {
 }
 
 .hourlyContainer {
-	border-top: 2px solid rgb(30, 30, 30);
-	padding-top: 10px;
-	margin-top: 10px;
+	border-top: 2px solid rgb(69, 69, 216);
+	padding-top: 5px;
+	margin-top: 5px;
 }
 
 .hourlyContainer::-webkit-scrollbar {
@@ -38,42 +38,51 @@ body {
 
 .hourlyContainer::-webkit-scrollbar-track {
 	-webkit-box-shadow: 5px 5px 5px -5px rgba(34, 60, 80, 0.2) inset;
-	background-color: #878798;
+	background-color: #b6b6c9;
 	border-radius: 10px;
 }
 
 .hourlyContainer::-webkit-scrollbar-thumb {
 	border-radius: 10px;
-	background: rgb(30, 30, 30);
+	background: rgb(69, 69, 216);
 }
 
 #weekWeather {
-	margin-top: 20px;
-	border: 3px solid white;
-	background-color: white;
+	margin: 0 auto;
+	min-width: 308px;
+	/* background-color: white; */
 	border-radius: 10px;
 	min-height: 200px;
 }
+
 #dayWeather {
 	margin-top: 20px;
 	border: 3px solid white;
 	background-color: white;
 	border-radius: 10px;
-
 	min-height: 200px;
 }
 #weatherCardContainer {
-	min-width: 605px;
-	min-height: 300px;
+	min-width: 308px;
+	max-width: 1000px;
+	min-height: 300px !important;
+	padding: 0;
+	margin-bottom: 15px;
 }
-
+#weatherCard,
+.card-img {
+	min-height: 300px !important;
+}
 #map {
-	width: 500px;
-	height: 310px;
+	width: 100%;
+	height: 96%;
+	max-height: 520px;
+	min-height: 308px;
 }
 
 .dailyWeatherData {
 	width: 35%;
+	min-width: 200px;
 }
 .weatherDiscription {
 	width: 30%;
@@ -82,11 +91,11 @@ body {
 .dailyWeatherHeaderAbout {
 	width: 45%;
 }
-
 .dailyWeatherIconsContainer {
 	width: 15%;
 	border-top: 2px solid rgba(34, 60, 80, 0.2);
 	border-right: 2px solid rgba(34, 60, 80, 0.2);
+	min-width: 200px;
 }
 
 .dailyWeatherIcons {
@@ -99,7 +108,6 @@ body {
 
 .dayTemperatureHeaders,
 .dayTemperature {
-	width: 88%;
 	border-top: 2px solid rgba(34, 60, 80, 0.2);
 	border-right: 2px solid rgba(34, 60, 80, 0.2);
 	padding-right: 3%;
@@ -112,15 +120,23 @@ body {
 .dailyDayTime {
 	border-top: 2px solid rgba(34, 60, 80, 0.2);
 	width: 25%;
+	min-width: 200px;
 }
 .dailyWeatherDiscription {
 	border-top: 2px solid rgba(34, 60, 80, 0.2);
 	border-right: 2px solid rgba(34, 60, 80, 0.2);
 	width: 20%;
+	min-width: 200px;
 }
 
 #dailyWeatherItem {
 	background-color: white;
 	border: 2px solid rgba(34, 60, 80, 0.2);
 	border-radius: 10px;
+	min-width: 308px;
+}
+
+.hourlyCardItemBorder {
+	border-right: 7px solid rgb(69, 69, 216);
+	border-radius: 4px;
 }

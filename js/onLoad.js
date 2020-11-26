@@ -10,9 +10,14 @@ document.addEventListener('DOMContentLoaded', () => {
 				return result.geoObjects.get(0).properties.get('metaDataProperty').GeocoderMetaData.AddressDetails
 					.Country.AdministrativeArea.AdministrativeAreaName;
 			});
+
+		showLoader();
+
 		const weatherData = await getWeatherData(city);
 		const hourlyWeatherData = await getHourlyWeatherData(latitude, longitude);
 		const weekWeatherData = await getWeekWeatherData(latitude, longitude);
+
+		hideLoader();
 
 		printTempaltes(weatherData, hourlyWeatherData, weekWeatherData);
 
@@ -21,9 +26,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	const errorCallback = async (error) => {
 		const [ lat, lon ] = defaultCoord;
+
+		showLoader();
+
 		const weatherData = await getWeatherData(defaultCity);
 		const hourlyWeatherData = await getHourlyWeatherData(lat, lon);
 		const weekWeatherData = await getWeekWeatherData(lat, lon);
+
+		hideLoader();
 
 		printTempaltes(weatherData, hourlyWeatherData, weekWeatherData);
 

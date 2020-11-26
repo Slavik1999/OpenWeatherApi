@@ -11,22 +11,23 @@ function getDailyWeatherTemplate(dailyWeatherData) {
 function getDailyTemplate(daily) {
 	const { dt, feels_like, humidity, pressure, temp, weather, wind_deg, wind_speed, sunrise, sunset } = daily;
 	const convertPressure = Math.floor(pressure * 0.75);
+
 	return `
-	<div class="d-flex p-3 ml-3 mt-5 justify-content-between" id='dailyWeatherItem'>
+	<div class="d-flex flex-wrap p-3 mt-5 justify-content-center" id='dailyWeatherItem'>
 		<div class='dailyWeatherData'>
-			<div class='dailyWeatherHeader d-flex mb-3'>
+			<div class='dailyWeatherHeader d-flex flex-column mb-3  ml-3'>
 				<div>
 					<b>
 						${formatDate(dt)}
 					</b>
 				</div>
-				<div class='dayTemperatureHeaders d-flex ml-2 mt-5 justify-content-between'>
-						<div><b>Day Part</b></div>
-						<div><b>Temp</b></div>
-						<div><b>Feels like</b></div>
+				<div class='dayTemperatureHeaders d-flex justify-content-between'>
+						<span>Day Part</span>
+						<span>Temp</span>
+						<span>Feels like</span>
 				</div>
 			</div>
-			<div class='dayTemperature d-flex justify-content-between ml-5'>
+			<div class='dayTemperature d-flex justify-content-between ml-3'>
 				<div>
 					<div>Morning</div>
 					<div>Day</div>
@@ -72,11 +73,11 @@ function getDailyTemplate(daily) {
 				<img src='./img/day-and-night.png'/>
 			</div>
 			<div class='d-flex'>
-				<div class='mr-4 d-flex flex-column align-items-center'>
+				<div class='mr-2 d-flex flex-column align-items-center'>
 					<img src='./img/sunrise.png'/>
 					<div>${formatDailyDayStart(sunrise)}</div>
 				</div>
-				<div class='mr-4 text-center'>
+				<div class='mr-2 text-center'>
 					<div><b>Daylight hours</b></div>
 					<div>${formatDailyDayLong(sunset - sunrise)}</div>
 				</div>
@@ -107,12 +108,14 @@ function getWeekWeatherTemplate(hourlyWeatherData) {
 		daily += getWeekTemplate(dailyWeather);
 	});
 
+	weekWeather.style.background = 'white';
+
 	return daily;
 }
 
 function getWeekTemplate(daily) {
 	return `	
-	<div class=" d-flex flex-column align-items-center justify-content-around pr-2 pl-4">
+	<div class=" d-flex flex-column align-items-center justify-content-around mt-4 mb-4">
 		<div>${formatDate(daily.dt)}</div>
 			<div class='d-flex'>
 				<div class='d-flex justify-content-center'>${getWeatherIcons(daily.weather)}</div>
@@ -136,13 +139,16 @@ function getWeekTemplate(daily) {
 
 function getHourlyWeatherTemplate(hourlyWeatherData) {
 	let hourly = '';
+	let hourlyDay = '23:00';
 
 	hourlyWeatherData.map((hourlyWeather) => {
-		hourly += getHourlyTemplate(hourlyWeather);
+		let border = formatHourlyDateForBorder(hourlyWeather.dt) === hourlyDay ? true : false;
+
+		hourly += getHourlyTemplate(hourlyWeather, border);
 	});
 
 	return `
-			<div class="container-fluid ">
+			<div class="container">
 				<div class="row flex-row flex-nowrap overflow-auto hourlyContainer">
 					${hourly}
 				</div>
@@ -152,9 +158,11 @@ function getHourlyWeatherTemplate(hourlyWeatherData) {
 	`;
 }
 
-function getHourlyTemplate(hourly) {
+function getHourlyTemplate(hourly, border) {
 	return `
-	<div class=" d-flex flex-column align-items-center justify-content-around pr-2 pl-4">
+	<div class="
+	${border ? 'hourlyCardItemBorder' : ''} 
+	d-flex flex-column align-items-center justify-content-around pr-2 pl-4 mb-2 text-center">
 		<div>${formatHourlyDate(hourly.dt)}</div>
 		<div class='d-flex'>
 			<div class='smallWeatherIcon d-flex justify-content-center'>${getWeatherIcons(hourly.weather)}</div>
@@ -172,6 +180,7 @@ function getCardTemplate(weatherData) {
 	const { name, main, weather, wind, dt, sys } = weatherData;
 
 	const pressure = Math.floor(main.pressure * 0.75);
+
 	return `
 	<div class="card bg-dark text-white">
 		<img src=${getCardImage(weather, dt, sys)} class="card-img" alt="...">

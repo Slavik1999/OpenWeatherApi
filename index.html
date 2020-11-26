@@ -20,20 +20,23 @@
             <div id='errorCity'></div>
             <input type="text" class="form-control" id="city" placeholder="Enter city" required>
           </div>
-        <button type='submit' class='btn btn-primary bg-secondary ml-3'>Add</button>
+        <div class='d-flex'>
+            <button type='submit' class='btn btn-primary bg-secondary ml-3'>Search</button>
+            <div class='ml-3' id='loader'></div>
+        </div>
     </form>
     
-    <div class="d-flex mt-3">
-        <div class="col-6" id='weatherCardContainer'>
-            <div class="card text-white" id='weatherCard'>
-            </div>
+    <div class="d-flex flex-wrap justify-content-around mt-3 mb-2">
+        <div class="col-sm-5 col-md-5 col-lg-5" id='weatherCardContainer'>
         </div>
-    
-        <div id="map" class="YMaps YMaps-cursor-grab"></div>
+
+        <div class='mapContainer col-sm-5 col-md-5 col-lg-5'>
+            <div id="map" class="YMaps YMaps-cursor-grab"></div>
+        </div>
     </div>
 
-    <div class="col-sm-12 col-md-11 col-lg-9 d-flex justify-content-center ml-3" id='weekWeather'></div>
-    <div class='container-fluid' id='dailyWeather'>
+    <div class="col-sm-11 col-md-11 col-lg-9 d-flex flex-wrap justify-content-around" id='weekWeather'></div>
+    <div class='container-fluid p-0' id='dailyWeather'>
 
     </div>
 
@@ -45,7 +48,8 @@
     <script src='./js/elements.js'></script>
     <script src='./js/constants.js'></script>
     <script src='./js/formatDates.js'></script>
-    <script src='./js/weatherDates.js'></script>
+    <script src='./js/weatherDatas.js'></script>
+    <script src='./js/loader.js'></script>
     <script src='./js/weatherTemplates.js'></script>
     <script src='./js/printTemplates.js'></script>
     <script src='./js/onLoad.js'></script>

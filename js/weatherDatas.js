@@ -19,6 +19,5 @@ const getWeekWeatherData = async (latitude, longitude) => {
 		`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude={daily}&appid=${key}`
 	);
 	let hourlyWeatherData = await hourlyWeatherRes.json();
-
 	return hourlyWeatherData.daily;
 };
